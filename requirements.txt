@@ -1,0 +1,22 @@
+# PyTorch Nightly with CUDA 13.0 support for RTX 5090 (sm_120)
+--extra-index-url https://download.pytorch.org/whl/nightly/cu130
+torch>=2.11.0.dev20260121
+torchvision>=0.25.0.dev20260121
+torchaudio>=2.11.0.dev20260121
+
+# Diffusers from GitHub (required for Flux2KleinPipeline)
+git+https://github.com/huggingface/diffusers.git
+
+# Windows Specific (Triton workaround)
+triton-windows<3.7
+
+# Core dependencies
+transformers>=4.46.0
+accelerate>=0.34.0
+sentencepiece>=0.2.0
+protobuf>=3.20.0
+
+# UI and utilities
+gradio>=5.0.0
+psutil>=6.1.0
+huggingface_hub>=0.26.0
