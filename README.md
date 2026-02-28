@@ -16,6 +16,7 @@ This project is specifically optimized for **NVIDIA RTX 5090** GPUs, utilizing P
 
 ## 🚀 Features
 
+* **Fully Portable:** Embedded Python — no system Python installation required.
 * **Optimized for Blackwell:** Built on PyTorch Nightly with CUDA 13.0 support for RTX 5090.
 * **Fast Generation:** Pre-configured for the distilled "Klein" model (only 4 steps required).
 * **Dual Modes:** Supports **Text-to-Image** and **Image-to-Image**.
@@ -27,42 +28,22 @@ This project is specifically optimized for **NVIDIA RTX 5090** GPUs, utilizing P
 
 * **OS:** Windows 10/11
 * **GPU:** NVIDIA RTX 3090 / 4090 / 5090 (24GB+ VRAM recommended)
-* **Python:** Version 3.10 or newer (ensure it is added to PATH)
 * **Git:** Required to install dependencies.
-* **Hugging Face Account:** Required to download the gated model (FLUX.2).
 
 ## 🛠️ Installation
-
-### Option 1: The Easy Way (Recommended)
 
 1.  Download this repository.
 2.  Double-click **`install.bat`**.
 3.  The script will:
-    * Create a virtual environment (`venv`).
+    * Download and set up an embedded Python environment (`python_env/`).
     * Install all dependencies (PyTorch Nightly, Diffusers, Gradio, etc.).
-    * **Ask for your Hugging Face Token**.
-    * *Note: If you don't have a token, generate one here: [Hugging Face Tokens](https://huggingface.co/settings/tokens)*
 
-### Option 2: Manual Installation
-
-If you prefer the command line:
-
-```bash
-# Create and activate venv
-python -m venv venv
-.\venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Login to Hugging Face (Required!)
-huggingface-cli login
-```
+No system Python, no virtual environment, and no Hugging Face login required.
 
 ## Usage
 Double-click `start_FLUX2-KLEIN-9B_gui.bat`.
 
-Wait for the model to load (first run downloads approx. 20GB).
+Wait for the model to load (first run downloads approx. 20GB to `model_cache/`).
 
 The GUI will open automatically in your browser (usually `http://127.0.0.1:7860`).
 
@@ -74,10 +55,8 @@ The Klein model is distilled, meaning it behaves differently than the base model
 - **Resolution**: 1024x1024 works best.
 
 ## Troubleshooting
-- **401/403 Client Error**: This means you are not logged in or haven't accepted the license for FLUX.2.
-  - Go to [Black Forest Labs on HF](https://huggingface.co/black-forest-labs/FLUX.2-klein-9B) and accept the license.
-  - Run `huggingface-cli login` again or re-run `install.bat`.
 - **OOM (Out of Memory)**: Ensure you don't have other heavy GPU apps running. The app uses CPU offloading to save VRAM.
+- **Python environment not found**: Make sure you ran `install.bat` before starting the app.
 
 ## License
 This project uses the FLUX.2 model. Please review the [Black Forest Labs license](https://huggingface.co/black-forest-labs/FLUX.2-klein-9B) for commercial usage restrictions.
