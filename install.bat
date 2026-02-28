@@ -1,83 +1,64 @@
 @echo off
-:: Bulletproof Installer for Flux.2 Klein
-title Install Flux.2 Klein
+:: Bulletproof Installer for Flux.2 Klein 9B
+title Install Flux.2 Klein 9B
 cls
 
 echo ---------------------------------------------------------------------
-echo   FLUX.2 KLEIN - INSTALLATION
+echo   FLUX.2 KLEIN 9B - INSTALLATION
 echo ---------------------------------------------------------------------
 echo.
 
-:: --- CHECK 1: Python ---
-python --version >nul 2>&1
-if %errorlevel% EQU 0 goto :FOUND_PYTHON
+:: 1. Check if Python exists
+if exist "python_env\python.exe" (
+    echo Python environment found. Skipping download.
+    goto :INSTALL_PACKAGES
+)
 
-:: Fallback: Try 'py' launcher
-py --version >nul 2>&1
-if %errorlevel% EQU 0 goto :FOUND_PY
+:: 2. Download Python Portable (3.11.9)
+echo [1/4] Downloading Python 3.11 Portable...
+if not exist "python_env" mkdir "python_env"
+curl -L "https://www.python.org/ftp/python/3.11.9/python-3.11.9-embed-amd64.zip" -o "python_env\python.zip"
 
-:: If neither found
-color 0c
-echo [ERROR] Python not found!
-echo Please install Python 3.10+ and add it to PATH.
-pause
-exit /b
+:: 3. Unzip
+echo [2/4] Extracting Python...
+tar -xf "python_env\python.zip" -C "python_env"
+del "python_env\python.zip"
 
-:FOUND_PY
-set PYTHON_CMD=py
-goto :SETUP_VENV
+:: 4. Patch ._pth file (enable import site)
+echo [3/4] Configuring Python...
+(
+echo python311.zip
+echo .
+echo import site
+) > "python_env\python311._pth"
 
-:FOUND_PYTHON
-set PYTHON_CMD=python
-goto :SETUP_VENV
+:: 5. Install Pip
+echo [4/4] Installing Pip Package Manager...
+curl -L "https://bootstrap.pypa.io/get-pip.py" -o "get-pip.py"
+.\python_env\python.exe get-pip.py --no-warn-script-location
+del "get-pip.py"
 
-:SETUP_VENV
-echo Using Python command: %PYTHON_CMD%
+:INSTALL_PACKAGES
 echo.
+echo ===================================================
+echo   Installing Libraries...
+echo ===================================================
 
-:: --- CHECK 2: Venv ---
-if exist "venv" goto :INSTALL_DEPS
-echo [1/3] Creating virtual environment...
-%PYTHON_CMD% -m venv venv
-if %errorlevel% NEQ 0 goto :ERROR_VENV
+:: A. PyTorch Nightly (Must be first for RTX 5090)
+echo Installing PyTorch Nightly (Blackwell Support)...
+.\python_env\python.exe -m pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu130 --no-warn-script-location
 
-:INSTALL_DEPS
-echo [2/3] Installing dependencies...
-call venv\Scripts\activate.bat
+:: B. Other Requirements
+echo Installing Flux.2 Klein and Tools...
+.\python_env\python.exe -m pip install -r requirements.txt --no-warn-script-location
 
-%PYTHON_CMD% -m pip install --upgrade pip
-pip install -r requirements.txt
-if %errorlevel% NEQ 0 goto :ERROR_INSTALL
+:: C. Cleanup
+echo Cleaning up download cache...
+.\python_env\python.exe -m pip cache purge
 
-:: --- CHECK 3: Login ---
 echo.
-echo [3/3] HUGGING FACE LOGIN
-echo.
-echo Do you want to log in now? (Required for Gated Models)
-set /p login_choice="Type Y for Yes, N for No: "
-if /i "%login_choice%"=="Y" goto :DO_LOGIN
-goto :FINISH
-
-:DO_LOGIN
-huggingface-cli login
-goto :FINISH
-
-:ERROR_VENV
-color 0c
-echo [ERROR] Could not create venv.
-pause
-exit /b
-
-:ERROR_INSTALL
-color 0c
-echo [ERROR] Installation failed. Check internet connection.
-pause
-exit /b
-
-:FINISH
-echo.
-echo =========================================================
+echo ===================================================
 echo   INSTALLATION COMPLETE!
-echo   You can now start the app.
-echo =========================================================
+echo   You can now run 'start_FLUX2-KLEIN-9B_gui.bat'.
+echo ===================================================
 pause

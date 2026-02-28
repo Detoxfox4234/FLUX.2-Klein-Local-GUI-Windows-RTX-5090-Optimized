@@ -1,0 +1,6 @@
+python_env/
+model_cache/
+outputs/
+venv/
+.claude/
+__pycache__/
