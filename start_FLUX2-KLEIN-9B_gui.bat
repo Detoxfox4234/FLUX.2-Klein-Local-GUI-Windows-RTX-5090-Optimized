@@ -1,5 +1,6 @@
 @echo off
 title FLUX2 KLEIN 9B
+set PYTHONIOENCODING=utf-8
 echo Starting App...
 
 if not exist "python_env\python.exe" (
