@@ -489,7 +489,7 @@ with gr.Blocks(title="Flux.2 Klein GUI") as demo:
 
                 with gr.Row():
                     seed = gr.Number(label="Seed (-1 = Random)", value=-1)
-                    strength = gr.Slider(0.0, 1.0, value=0.8, step=0.05, label="Img Strength")
+                    strength = gr.Slider(0.0, 1.0, value=0.9, step=0.05, label="Img Strength")
 
             # Main Action Button
             generate_btn = gr.Button("🚀 GENERATE IMAGE", elem_classes="generate-btn")
