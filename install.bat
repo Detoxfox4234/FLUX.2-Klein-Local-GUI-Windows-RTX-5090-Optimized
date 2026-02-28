@@ -56,6 +56,21 @@ echo Installing Flux.2 Klein and Tools...
 echo Cleaning up download cache...
 .\python_env\python.exe -m pip cache purge
 
+:: D. Hugging Face Login (required for gated model)
+echo.
+echo ===================================================
+echo   HUGGING FACE LOGIN
+echo ===================================================
+echo.
+echo FLUX.2 is a gated model. You need a Hugging Face
+echo account and must accept the model license first:
+echo https://huggingface.co/black-forest-labs/FLUX.2-klein-9B
+echo.
+set /p login_choice="Log in to Hugging Face now? (Y/N): "
+if /i "%login_choice%"=="Y" (
+    .\python_env\python.exe -m huggingface_hub.commands.huggingface_cli login
+)
+
 echo.
 echo ===================================================
 echo   INSTALLATION COMPLETE!

@@ -29,6 +29,10 @@ This project is specifically optimized for **NVIDIA RTX 5090** GPUs, utilizing P
 * **OS:** Windows 10/11
 * **GPU:** NVIDIA RTX 3090 / 4090 / 5090 (24GB+ VRAM recommended)
 * **Git:** Required to install dependencies.
+* **Hugging Face Account:** FLUX.2 is a gated model. You need to:
+  1. Create a free account at [huggingface.co](https://huggingface.co).
+  2. Accept the model license at [FLUX.2-klein-9B](https://huggingface.co/black-forest-labs/FLUX.2-klein-9B).
+  3. Generate an access token at [HF Tokens](https://huggingface.co/settings/tokens).
 
 ## 🛠️ Installation
 
@@ -37,13 +41,14 @@ This project is specifically optimized for **NVIDIA RTX 5090** GPUs, utilizing P
 3.  The script will:
     * Download and set up an embedded Python environment (`python_env/`).
     * Install all dependencies (PyTorch Nightly, Diffusers, Gradio, etc.).
+    * Ask you to log in to Hugging Face (required once to download the gated model).
 
-No system Python, no virtual environment, and no Hugging Face login required.
+No system Python and no virtual environment required.
 
 ## Usage
 Double-click `start_FLUX2-KLEIN-9B_gui.bat`.
 
-Wait for the model to load (first run downloads approx. 20GB to `model_cache/`).
+Wait for the model to load (first run downloads approx. 52GB to `model_cache/`).
 
 The GUI will open automatically in your browser (usually `http://127.0.0.1:7860`).
 
@@ -55,6 +60,9 @@ The Klein model is distilled, meaning it behaves differently than the base model
 - **Resolution**: 1024x1024 works best.
 
 ## Troubleshooting
+- **401/403 Client Error**: You are not logged in or haven't accepted the model license.
+  - Go to [FLUX.2-klein-9B](https://huggingface.co/black-forest-labs/FLUX.2-klein-9B) and accept the license.
+  - Re-run `install.bat` and log in again, or run `.\python_env\python.exe -m huggingface_hub.commands.huggingface_cli login`.
 - **OOM (Out of Memory)**: Ensure you don't have other heavy GPU apps running. The app uses CPU offloading to save VRAM.
 - **Python environment not found**: Make sure you ran `install.bat` before starting the app.
 
